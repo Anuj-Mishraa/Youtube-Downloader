@@ -3,13 +3,8 @@ from pytube import YouTube
 import os
 def main():
     st.title("YouTube Video Downloader")
-    sys_name = st.text_input("Enter your system mobile or pc:")
-    if sys_name == "pc":
-        DOWNLOAD_FOLDER = f"{os.getenv('USERPROFILE')}\\Downloads"
-    elif sys_name == "mobile":  
-        DOWNLOAD_FOLDER = "storage/emulated/0/Download"
-    else:
-        st.error("PLease wite only mobile or pc")
+    sys_path = st.text_input("Enter your path:")
+    
     # Get the YouTube video URL from the user
     video_url = st.text_input("Enter the YouTube video URL:")
 
@@ -23,7 +18,7 @@ def main():
             stream = yt.streams.get_highest_resolution()
 
             # Download the video to the current directory
-            stream.download(DOWNLOAD_FOLDER)
+            stream.download(sys_path)
             st.success("Video downloaded successfully!")
         except:
             st.error("Oops! Something went wrong. Please check the video URL and try again.")
