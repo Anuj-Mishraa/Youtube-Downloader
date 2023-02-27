@@ -1,6 +1,7 @@
 import streamlit as st
 from pytube import YouTube
 import os
+
 def main():
     st.title("YouTube Video Downloader")
     if os.name == "nt":
@@ -20,10 +21,12 @@ def main():
             stream = yt.streams.get_highest_resolution()
 
             # Download the video to the current directory
-            stream.download()
+            stream.download(DOWNLOAD_FOLDER)
             st.success("Video downloaded successfully!")
-        except:
-            st.error("Oops! Something went wrong. Please check the video URL and try again.")
+        except YouTube.exceptions.VideoUnavailable:
+            st.error("Oops! Video is unavailable. Please check the video URL and try again.")
+        except Exception as e:
+            st.error(f"Oops! Something went wrong. Error message: {e}")
 
 if __name__ == '__main__':
     main()
