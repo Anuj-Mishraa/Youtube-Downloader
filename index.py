@@ -1,5 +1,6 @@
 import streamlit as st
 from pytube import YouTube
+import pytube
 import os
 
 def main():
@@ -23,7 +24,7 @@ def main():
             # Download the video to the current directory
             stream.download(DOWNLOAD_FOLDER)
             st.success("Video downloaded successfully!")
-        except YouTube.exceptions.VideoUnavailable:
+        except pytube.exceptions.VideoUnavailable:
             st.error("Oops! Video is unavailable. Please check the video URL and try again.")
         except Exception as e:
             st.error(f"Oops! Something went wrong. Error message: {e}")
