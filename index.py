@@ -7,7 +7,7 @@ def main():
     if sys_name == "pc":
         DOWNLOAD_FOLDER = f"{os.getenv('USERPROFILE')}\\Downloads"
     elif sys_name == "mobile":  
-        DOWNLOAD_FOLDER = "Storage/emulated/0/Download"
+        DOWNLOAD_FOLDER = "storage/emulated/0/Download"
     else:
         st.error("PLease wite only mobile or pc")
     # Get the YouTube video URL from the user
@@ -23,7 +23,7 @@ def main():
             stream = yt.streams.get_highest_resolution()
 
             # Download the video to the current directory
-            stream.download()
+            stream.download(DOWNLOAD_FOLDER)
             st.success("Video downloaded successfully!")
         except:
             st.error("Oops! Something went wrong. Please check the video URL and try again.")
