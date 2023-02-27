@@ -20,7 +20,7 @@ def main():
             stream = yt.streams.get_highest_resolution()
 
             # Download the video to the current directory
-            stream.download(DOWNLOAD_FOLDER)
+            stream.download()
             st.success("Video downloaded successfully!")
         except:
             st.error("Oops! Something went wrong. Please check the video URL and try again.")
