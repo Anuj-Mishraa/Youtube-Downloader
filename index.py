@@ -1,10 +1,15 @@
 import streamlit as st
 from pytube import YouTube
 import os
-
 def main():
     st.title("YouTube Video Downloader")
-
+    sys_name = st.text_input("Enter your system mobile or pc:")
+    if sys_name == "pc":
+        DOWNLOAD_FOLDER = f"{os.getenv('USERPROFILE')}\\Downloads"
+    elif sys_name == "mobile":  
+        DOWNLOAD_FOLDER = "Storage/emulated/0/Download"
+    else:
+        st.error("PLease wite only mobile or pc")
     # Get the YouTube video URL from the user
     video_url = st.text_input("Enter the YouTube video URL:")
 
@@ -17,20 +22,9 @@ def main():
             # Get the highest resolution video stream
             stream = yt.streams.get_highest_resolution()
 
-            # Ask the user to select the download directory using the system's file explorer
-            download_dir = st.text_input("Enter the download directory:")
-            if not download_dir:
-                download_dir = os.path.expanduser("~") + os.sep + "Downloads"
-            else:
-                download_dir = os.path.abspath(download_dir)
-
-            if not os.path.exists(download_dir):
-                st.error(f"The directory {download_dir} does not exist.")
-                return
-
-            # Download the video to the selected directory
-            file_path = stream.download(download_dir)
-            st.success(f"Video downloaded successfully at {file_path}")
+            # Download the video to the current directory
+            stream.download(DOWNLOAD_FOLDER)
+            st.success("Video downloaded successfully!")
         except:
             st.error("Oops! Something went wrong. Please check the video URL and try again.")
 
