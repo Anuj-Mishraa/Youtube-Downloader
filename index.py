@@ -29,7 +29,7 @@ def main():
 
     if st.button("Download"):
         # Send a request to the Flask endpoint to download the video
-        url = f"http://localhost:5000/download?video_url={video_url}"
+        url = f"http://localhost:5050/download?video_url={video_url}"
         response = requests.get(url)
 
         if response.status_code == 200:
