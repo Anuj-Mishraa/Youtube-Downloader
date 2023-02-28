@@ -2,30 +2,40 @@ import streamlit as st
 from pytube import YouTube
 import pytube
 import os
+from flask import Flask, send_file,request
+import requests
+
+app = Flask(__name__)
+
+@app.route('/download')
+def download():
+    # Get the YouTube video URL from the user
+    video_url = request.args.get('video_url')
+
+    # Create a YouTube object from the video URL
+    yt = YouTube(video_url)
+
+    # Get the highest resolution video stream
+    stream = yt.streams.get_highest_resolution()
+
+    # Set the Content-Disposition header to specify the filename and download behavior
+    response = send_file(stream.download(), as_attachment=True, attachment_filename=yt.title+".mp4")
+
+    return response
 
 def main():
     st.title("YouTube Video Downloader")
-    dw = st.text_input("Enter the Download directory path")
-    # Get the YouTube video URL from the user
-    DOWNLOAD_FOLDER = os.getenv("DOWNLOAD_FOLDER", dw)
     video_url = st.text_input("Enter the YouTube video URL:")
 
-    # Download the YouTube video when the user clicks the "Download" button
     if st.button("Download"):
-        try:
-            # Create a YouTube object from the video URL
-            yt = YouTube(video_url)
+        # Send a request to the Flask endpoint to download the video
+        url = f"http://localhost:5000/download?video_url={video_url}"
+        response = requests.get(url)
 
-            # Get the highest resolution video stream
-            stream = yt.streams.get_highest_resolution()
-
-            # Download the video to the current directory
-            stream.download(DOWNLOAD_FOLDER)
+        if response.status_code == 200:
             st.success("Video downloaded successfully!")
-        except pytube.exceptions.VideoUnavailable:
-            st.error("Oops! Video is unavailable. Please check the video URL and try again.")
-        except Exception as e:
-            st.error(f"Oops! Something went wrong. Error message: {e}")
+        else:
+            st.error("Oops! Something went wrong. Please try again.")
 
 if __name__ == '__main__':
-    main()
+    app.run()
