@@ -5,7 +5,7 @@ import os
 
 def main():
     st.title("YouTube Video Downloader")
-    DOWNLOAD_FOLDER = f"{os.getenv('HOME')}/Downloads"
+    DOWNLOAD_FOLDER = st.text_input("Enter the Download directory path")
     # Get the YouTube video URL from the user
     video_url = st.text_input("Enter the YouTube video URL:")
 
